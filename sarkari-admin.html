@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SarkariResult Admin Panel – GOD MODE</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--saffron:#FF6B00;--navy:#0A1628;--navy2:#112240;--green:#138808;--red:#E53E3E;--blue:#2B6CB0;--gold:#D69E2E;--border:#E2E8F0;--muted:#718096;--off:#F0F4F8;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--off);color:#1A202C;}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy),#1a2d4a);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.login-box{background:white;border-radius:16px;padding:40px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+.login-box .logo{width:64px;height:64px;background:linear-gradient(135deg,var(--saffron),#FFB347);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',sans-serif;font-size:26px;font-weight:800;color:white;margin:0 auto 16px;}
+.login-box h2{font-family:'Baloo 2',sans-serif;font-size:22px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.login-box p{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.login-box input{width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:8px;font-size:14px;margin-bottom:12px;outline:none;}
+.login-box input:focus{border-color:var(--saffron);}
+.login-box button{width:100%;padding:12px;background:linear-gradient(135deg,var(--saffron),#FF8C33);color:white;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;}
+.login-box .err{color:var(--red);font-size:12px;margin-top:8px;}
+#login-screen.hidden{display:none;}
+
+/* LAYOUT */
+.admin-wrap{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;}
+.sidebar-logo{padding:20px 16px;border-bottom:1px solid #1e3a5f;display:flex;align-items:center;gap:10px;}
+.sidebar-logo .s-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--saffron),#FFB347);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:800;color:white;flex-shrink:0;}
+.sidebar-logo span{font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;color:white;line-height:1.2;}
+.sidebar-logo small{font-size:10px;color:#5a7a9a;font-weight:400;}
+.sidebar-section{padding:12px 0;}
+.sidebar-section-title{font-size:10px;font-weight:700;color:#3a5570;letter-spacing:1.5px;padding:0 16px 6px;text-transform:uppercase;}
+.sidebar-btn{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#8899aa;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all 0.2s;border-left:3px solid transparent;}
+.sidebar-btn:hover{background:#0e1e33;color:white;}
+.sidebar-btn.active{background:#1a2d45;color:white;border-left-color:var(--saffron);}
+.sidebar-btn .sb-icon{font-size:16px;flex-shrink:0;}
+.sidebar-footer{margin-top:auto;padding:16px;border-top:1px solid #1e3a5f;}
+.logout-btn{width:100%;padding:9px;background:#1e2d45;color:#8899aa;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-weight:600;}
+.logout-btn:hover{background:var(--red);color:white;}
+
+/* MAIN */
+.main{margin-left:240px;flex:1;display:flex;flex-direction:column;}
+.topbar{background:white;border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.page-title{font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:800;color:var(--navy);}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.save-status{font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;}
+.save-status.saved{background:#f0fff4;color:var(--green);}
+.save-status.saving{background:#fffaf0;color:var(--gold);}
+.save-status.error{background:#fff0f0;color:var(--red);}
+.content-area{padding:24px;flex:1;}
+
+/* SECTIONS */
+.section{display:none;}.section.active{display:block;}
+
+/* CARDS */
+.card{background:white;border-radius:12px;border:1px solid var(--border);padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+.card-title{font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--off);display:flex;align-items:center;justify-content:space-between;}
+.card-title .ct-icon{background:var(--saffron);width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;color:white;margin-right:8px;}
+
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-row.triple{grid-template-columns:1fr 1fr 1fr;}
+.form-row.single{grid-template-columns:1fr;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group label{font-size:12px;font-weight:700;color:var(--navy);letter-spacing:0.3px;}
+.form-group input,.form-group select,.form-group textarea{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none;font-family:'Source Sans 3',sans-serif;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--saffron);}
+.form-group textarea{resize:vertical;min-height:70px;}
+
+/* BADGES PICKER */
+.badges-picker{display:flex;flex-wrap:wrap;gap:8px;padding:10px;}
+.badge-pick{padding:5px 12px;border-radius:20px;border:2px solid var(--border);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;user-select:none;}
+.badge-pick.sel-new{background:#fff0f0;color:var(--red);border-color:var(--red);}
+.badge-pick.sel-hot{background:#fff5f0;color:var(--saffron);border-color:var(--saffron);}
+.badge-pick.sel-out{background:#f0fff4;color:var(--green);border-color:var(--green);}
+.badge-pick.sel-soon{background:#fffaf0;color:var(--gold);border-color:var(--gold);}
+
+/* BUTTONS */
+.btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-primary{background:var(--saffron);color:white;}.btn-primary:hover{background:#e55e00;}
+.btn-success{background:var(--green);color:white;}
+.btn-danger{background:var(--red);color:white;}
+.btn-outline{background:white;border:1.5px solid var(--border);color:var(--navy);}
+.btn-sm{padding:5px 12px;font-size:12px;}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table th{background:var(--off);padding:10px 12px;text-align:left;font-weight:700;font-size:11px;letter-spacing:0.5px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid var(--border);}
+.data-table td{padding:10px 12px;border-bottom:1px solid #f0f4f8;vertical-align:top;}
+.data-table tr:hover td{background:#fafcff;}
+.data-table .t-title{font-weight:600;color:var(--navy);max-width:280px;}
+.data-table .t-org{font-size:11px;color:var(--muted);}
+.actions{display:flex;gap:6px;}
+.toggle-active{cursor:pointer;font-size:18px;user-select:none;}
+
+/* TABS */
+.post-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:20px;}
+.post-tab{padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;}
+.post-tab.active{color:var(--saffron);border-bottom-color:var(--saffron);}
+
+/* STATS MINI */
+.stats-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.stat-mini-card{background:white;border-radius:10px;padding:16px;border:1px solid var(--border);text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+.stat-mini-num{font-family:'Baloo 2',sans-serif;font-size:26px;font-weight:800;color:var(--saffron);}
+.stat-mini-label{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;}
+
+/* TICKER ITEMS */
+.ticker-item-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f4f8;}
+.ticker-item-row input{flex:1;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;outline:none;}
+.ticker-item-row input:focus{border-color:var(--saffron);}
+
+/* QUICK/CAT ITEM */
+.item-row{display:grid;grid-template-columns:50px 1fr 1fr auto auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #f0f4f8;}
+.item-row input{padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;outline:none;}
+.item-row input:focus{border-color:var(--saffron);}
+
+/* DATE ROW */
+.date-item-row{display:grid;grid-template-columns:1fr 1fr 120px auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #f0f4f8;}
+.date-item-row input,.date-item-row select{padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;outline:none;}
+
+/* ALERT */
+.alert{padding:12px 16px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:16px;}
+.alert-success{background:#f0fff4;color:var(--green);border:1px solid #9ae6b4;}
+.alert-error{background:#fff0f0;color:var(--red);border:1px solid #fcc;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:white;border-radius:14px;padding:28px;max-width:600px;width:95%;max-height:90vh;overflow-y:auto;border-top:4px solid var(--saffron);}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.modal-head h3{font-family:'Baloo 2',sans-serif;font-size:18px;font-weight:800;color:var(--navy);}
+.modal-close-btn{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);}
+
+/* HAMBURGER */
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:5px;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--navy);border-radius:2px;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:150;}
+.sidebar-overlay.open{display:block;}
+
+/* MOBILE */
+@media(max-width:768px){
+  .hamburger{display:flex;}
+  .sidebar{transform:translateX(-100%);transition:transform 0.28s ease;z-index:200;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .topbar{padding:10px 12px;gap:8px;}
+  .page-title{font-size:14px;}
+  .topbar-right{gap:6px;}
+  .save-status{font-size:10px;padding:3px 8px;}
+  .content-area{padding:10px;}
+  .stats-mini{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .stat-mini-num{font-size:20px;}
+  .form-row,.form-row.triple{grid-template-columns:1fr;}
+  .item-row{grid-template-columns:36px 1fr auto auto;gap:5px;}
+  .date-item-row{grid-template-columns:1fr 1fr;gap:6px;}
+  .data-table th:nth-child(3),.data-table td:nth-child(3),
+  .data-table th:nth-child(4),.data-table td:nth-child(4){display:none;}
+  .modal-box{padding:16px;}
+  .login-box{width:92%;padding:24px 18px;}
+  .card{padding:14px;}
+  .post-tabs{overflow-x:auto;}.post-tab{font-size:11px;padding:8px 12px;white-space:nowrap;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="logo">⚡</div>
+    <h2>GOD MODE</h2>
+    <p>SarkariResult Admin Panel</p>
+    <input type="text" id="admin-user" placeholder="Username" />
+    <input type="password" id="admin-pass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()" />
+    <button onclick="doLogin()">🚀 Login</button>
+    <div class="err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- CREDENTIALS -->
+<script>
+window.ADMIN_USER = "manucybercafe";
+window.ADMIN_PASS = "manucyber";
+</script>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, update, remove, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// 🔴 APNA FIREBASE CONFIG YAHAN PASTE KARO (same as sarkari-result.html):
+const firebaseConfig = {
+  apiKey: "AIzaSyB0Dphn_eNlwvwYX-Oyv59l23SMglHaAoE",
+  authDomain: "cyber-e5c99.firebaseapp.com",
+  databaseURL: "https://cyber-e5c99-default-rtdb.firebaseio.com",
+  projectId: "cyber-e5c99",
+  storageBucket: "cyber-e5c99.firebasestorage.app",
+  messagingSenderId: "430012918147",
+  appId: "1:430012918147:web:8942d816d328fa80c2eeb6"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+window.db = db;
+window.dbRef = ref;
+window.dbSet = set;
+window.dbUpdate = update;
+window.dbRemove = remove;
+window.dbPush = push;
+window.dbServerTimestamp = serverTimestamp;
+
+// ===== LOAD ALL DATA =====
+function saveStatus(msg, type='saved') {
+  const el = document.getElementById('save-status');
+  el.textContent = msg; el.className = 'save-status ' + type;
+  if(type==='saved') setTimeout(()=>{ el.textContent='✅ Saved'; }, 2500);
+}
+window.saveStatus = saveStatus;
+
+// SETTINGS
+onValue(ref(db,'settings'), snap => {
+  const s = snap.val() || {};
+  window._settings = s;
+  setVal('set-siteTitle', s.siteTitle||'SarkariResult.in');
+  setVal('set-logoText', s.logoText||'SR');
+  setVal('set-tagline', s.tagline||'Sarkari Naukri | Result | Admit Card 2026');
+  setVal('set-footerAbout', s.footerAbout||'');
+  setVal('set-footerEmail', s.footerEmail||'');
+  setVal('set-whatsappLink', s.whatsappLink||'');
+  setVal('set-whatsappText', s.whatsappText||'Daily job alerts & updates');
+  setVal('set-waBoxColor', s.waBoxColor||'#25D366');
+  setVal('set-notifText', s.notifText||'Job Alerts On Karo');
+  setVal('set-notifSubText', s.notifSubText||'Naye jobs ki instant notification paao');
+  setVal('set-notifShow', s.showNotifBanner===false ? 'false' : 'true');
+  setVal('set-footerBottom', s.footerBottom||'');
+});
+
+// STATS
+onValue(ref(db,'stats'), snap => {
+  const s = snap.val() || {};
+  setVal('stat-activeJobs', s.activeJobs||0);
+  setVal('stat-totalVac', s.totalVacancies||0);
+  setVal('stat-results', s.results||0);
+  setVal('stat-admit', s.admitCards||0);
+  // dashboard
+  document.getElementById('dash-jobs').textContent = s.activeJobs||0;
+  document.getElementById('dash-vac').textContent = Number(s.totalVacancies||0).toLocaleString('en-IN');
+  document.getElementById('dash-res').textContent = s.results||0;
+  document.getElementById('dash-adm').textContent = s.admitCards||0;
+});
+
+// TICKER
+onValue(ref(db,'ticker'), snap => {
+  window._tickerData = snap.val() || {};
+  renderTickerAdmin();
+});
+
+// QUICK LINKS
+onValue(ref(db,'quickLinks'), snap => {
+  window._quickLinks = snap.val() || {};
+  renderQuickAdmin();
+});
+
+// CATEGORIES
+onValue(ref(db,'categories'), snap => {
+  window._categories = snap.val() || {};
+  renderCatsAdmin();
+});
+
+// IMPORTANT DATES
+onValue(ref(db,'importantDates'), snap => {
+  window._importantDates = snap.val() || {};
+  renderDatesAdmin();
+});
+
+// POSTS
+['jobs','results','admitCards','answerKeys'].forEach(type => {
+  onValue(ref(db,'posts/'+type), snap => {
+    window['_posts_'+type] = snap.val() || {};
+    if(window._currentPostTab === type) renderPostsTable(type);
+    // update dash count
+    const cnt = snap.val() ? Object.keys(snap.val()).length : 0;
+    const el = document.getElementById('dash-posts-'+type);
+    if(el) el.textContent = cnt;
+  });
+});
+</script>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- ADMIN WRAP -->
+<div class="admin-wrap" id="admin-wrap" style="display:none">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="s-icon">⚡</div>
+      <div>
+        <span>GOD MODE<br><small>Admin Panel</small></span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Dashboard</div>
+      <button class="sidebar-btn active" onclick="showSection('dashboard',this)"><span class="sb-icon">📊</span> Dashboard</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Content</div>
+      <button class="sidebar-btn" onclick="showSection('posts',this)"><span class="sb-icon">📋</span> Posts (Jobs/Results)</button>
+      <button class="sidebar-btn" onclick="showSection('ticker',this)"><span class="sb-icon">📢</span> Ticker / Breaking News</button>
+      <button class="sidebar-btn" onclick="showSection('quicklinks',this)"><span class="sb-icon">⚡</span> Quick Links</button>
+      <button class="sidebar-btn" onclick="showSection('categories',this)"><span class="sb-icon">🗂️</span> Categories</button>
+      <button class="sidebar-btn" onclick="showSection('dates',this)"><span class="sb-icon">📅</span> Important Dates</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Site Config</div>
+      <button class="sidebar-btn" onclick="showSection('stats',this)"><span class="sb-icon">📈</span> Stats Numbers</button>
+      <button class="sidebar-btn" onclick="showSection('settings',this)"><span class="sb-icon">⚙️</span> Site Settings</button>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()" id="hamburger-btn">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="page-title" id="page-title">📊 Dashboard</div>
+      <div class="topbar-right">
+        <span class="save-status saved" id="save-status">✅ Saved</span>
+        <span style="font-size:11px;color:var(--muted)">Admin</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- ===== DASHBOARD ===== -->
+      <div class="section active" id="section-dashboard">
+        <div class="stats-mini">
+          <div class="stat-mini-card"><div class="stat-mini-num" id="dash-jobs">—</div><div class="stat-mini-label">Active Jobs</div></div>
+          <div class="stat-mini-card"><div class="stat-mini-num" id="dash-vac">—</div><div class="stat-mini-label">Total Vacancies</div></div>
+          <div class="stat-mini-card"><div class="stat-mini-num" id="dash-res">—</div><div class="stat-mini-label">Results</div></div>
+          <div class="stat-mini-card"><div class="stat-mini-num" id="dash-adm">—</div><div class="stat-mini-label">Admit Cards</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
+          <div class="stat-mini-card"><div class="stat-mini-num" id="dash-posts-jobs">0</div><div class="stat-mini-label">Job Posts</div></div>
+          <div class="stat-mini-card"><div class="stat-mini-num" id="dash-posts-results">0</div><div class="stat-mini-label">Result Posts</div></div>
+          <div class="stat-mini-card"><div class="stat-mini-num" id="dash-posts-admitCards">0</div><div class="stat-mini-label">Admit Card Posts</div></div>
+          <div class="stat-mini-card"><div class="stat-mini-num" id="dash-posts-answerKeys">0</div><div class="stat-mini-label">Answer Key Posts</div></div>
+        </div>
+        <div class="card" style="background:linear-gradient(135deg,var(--navy),#1a2d4a);border:none">
+          <div style="color:white;font-family:'Baloo 2',sans-serif;font-size:18px;font-weight:800;margin-bottom:8px">⚡ Quick Actions</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <button class="btn btn-primary" onclick="showSection('posts',document.querySelectorAll('.sidebar-btn')[2]);openPostModal('jobs')">➕ Add New Job</button>
+            <button class="btn btn-success" onclick="showSection('posts',document.querySelectorAll('.sidebar-btn')[2]);openPostModal('results')">➕ Add Result</button>
+            <button class="btn" style="background:#2B6CB0;color:white" onclick="showSection('posts',document.querySelectorAll('.sidebar-btn')[2]);openPostModal('admitCards')">➕ Add Admit Card</button>
+            <button class="btn btn-outline" onclick="showSection('ticker',document.querySelectorAll('.sidebar-btn')[3])">📢 Edit Ticker</button>
+            <button class="btn btn-outline" onclick="showSection('settings',document.querySelectorAll('.sidebar-btn')[8])">⚙️ Site Settings</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== POSTS ===== -->
+      <div class="section" id="section-posts">
+        <div class="post-tabs">
+          <button class="post-tab active" onclick="switchPostTab('jobs',this)">📋 Latest Jobs</button>
+          <button class="post-tab" onclick="switchPostTab('results',this)">📜 Results</button>
+          <button class="post-tab" onclick="switchPostTab('admitCards',this)">🎫 Admit Cards</button>
+          <button class="post-tab" onclick="switchPostTab('answerKeys',this)">📝 Answer Keys</button>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+          <button class="btn btn-primary" onclick="openPostModal(window._currentPostTab)">➕ Add New Post</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div id="posts-table-wrap">Loading...</div>
+        </div>
+      </div>
+
+      <!-- ===== TICKER ===== -->
+      <div class="section" id="section-ticker">
+        <div class="card">
+          <div class="card-title">📢 Breaking News / Ticker Items
+            <button class="btn btn-primary btn-sm" onclick="addTickerItem()">➕ Add Item</button>
+          </div>
+          <div id="ticker-admin-list"></div>
+          <div style="margin-top:14px">
+            <button class="btn btn-primary" onclick="saveTicker()">💾 Save Ticker</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== QUICK LINKS ===== -->
+      <div class="section" id="section-quicklinks">
+        <div class="card">
+          <div class="card-title">⚡ Quick Links (Homepage Grid)
+            <button class="btn btn-primary btn-sm" onclick="addQuickItem()">➕ Add</button>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Icon | Label | Count/Subtitle | URL | Active?</div>
+          <div id="quick-admin-list"></div>
+          <div style="margin-top:14px">
+            <button class="btn btn-primary" onclick="saveQuickLinks()">💾 Save Quick Links</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CATEGORIES ===== -->
+      <div class="section" id="section-categories">
+        <div class="card">
+          <div class="card-title">🗂️ Browse by Category Pills
+            <button class="btn btn-primary btn-sm" onclick="addCatItem()">➕ Add</button>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Label | URL | Active?</div>
+          <div id="cats-admin-list"></div>
+          <div style="margin-top:14px">
+            <button class="btn btn-primary" onclick="saveCategories()">💾 Save Categories</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== IMPORTANT DATES ===== -->
+      <div class="section" id="section-dates">
+        <div class="card">
+          <div class="card-title">📅 Important Dates (Sidebar)
+            <button class="btn btn-primary btn-sm" onclick="addDateItem()">➕ Add Date</button>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Label | Date | Color | Active?</div>
+          <div id="dates-admin-list"></div>
+          <div style="margin-top:14px">
+            <button class="btn btn-primary" onclick="saveDates()">💾 Save Dates</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STATS ===== -->
+      <div class="section" id="section-stats">
+        <div class="card">
+          <div class="card-title">📈 Homepage Stats Numbers</div>
+          <div class="form-row">
+            <div class="form-group"><label>Active Jobs</label><input type="number" id="stat-activeJobs" placeholder="2847"></div>
+            <div class="form-group"><label>Total Vacancies</label><input type="number" id="stat-totalVac" placeholder="124950"></div>
+            <div class="form-group"><label>Results Out</label><input type="number" id="stat-results" placeholder="386"></div>
+            <div class="form-group"><label>Admit Cards</label><input type="number" id="stat-admit" placeholder="218"></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveStats()">💾 Save Stats</button>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS ===== -->
+      <div class="section" id="section-settings">
+        <div class="card">
+          <div class="card-title">🏷️ Logo & Site Identity</div>
+          <div class="form-row">
+            <div class="form-group"><label>Site Title</label><input type="text" id="set-siteTitle" placeholder="SarkariResult.in"></div>
+            <div class="form-group"><label>Logo Abbreviation (2-3 chars)</label><input type="text" id="set-logoText" placeholder="SR" maxlength="3"></div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group"><label>Tagline (header subtitle)</label><input type="text" id="set-tagline" placeholder="Sarkari Naukri | Result | Admit Card 2026"></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()">💾 Save Identity</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">💬 WhatsApp Box</div>
+          <div class="form-row">
+            <div class="form-group"><label>WhatsApp Channel Link</label><input type="text" id="set-whatsappLink" placeholder="https://whatsapp.com/channel/..."></div>
+            <div class="form-group"><label>Box Text</label><input type="text" id="set-whatsappText" placeholder="Daily job alerts & updates"></div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group"><label>Box Background Color</label><input type="color" id="set-waBoxColor" value="#25D366" style="height:42px;padding:4px"></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()">💾 Save WhatsApp</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🔔 Notification Banner</div>
+          <div class="form-row">
+            <div class="form-group"><label>Banner Heading</label><input type="text" id="set-notifText" placeholder="Job Alerts On Karo"></div>
+            <div class="form-group"><label>Banner Sub-text</label><input type="text" id="set-notifSubText" placeholder="Naye jobs ki instant notification paao"></div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group"><label>Show Banner?</label>
+              <select id="set-notifShow">
+                <option value="true">Yes – Show Banner</option>
+                <option value="false">No – Hide Banner</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()">💾 Save Banner</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📝 Footer</div>
+          <div class="form-row single">
+            <div class="form-group"><label>About Text</label><textarea id="set-footerAbout" placeholder="India ka #1 trusted platform..."></textarea></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Email</label><input type="text" id="set-footerEmail" placeholder="contact@sarkariresult.in"></div>
+            <div class="form-group"><label>Footer Bottom Text</label><input type="text" id="set-footerBottom" placeholder="© 2026 SarkariResult.in"></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()">💾 Save Footer</button>
+        </div>
+      </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /main -->
+</div><!-- /admin-wrap -->
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="post-modal" onclick="closePostModal(event)">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="post-modal-title">Add New Post</h3>
+      <button class="modal-close-btn" onclick="closePostModalDirect()">✕</button>
+    </div>
+    <input type="hidden" id="pm-type">
+    <input type="hidden" id="pm-key">
+    <div class="form-row single">
+      <div class="form-group"><label>Title *</label><input type="text" id="pm-title" placeholder="e.g. SSC CGL 2026 Notification"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Organization</label><input type="text" id="pm-org" placeholder="e.g. Staff Selection Commission"></div>
+      <div class="form-group"><label>Total Posts</label><input type="text" id="pm-posts" placeholder="e.g. 17,727"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Last Date</label><input type="text" id="pm-lastDate" placeholder="e.g. 18 Apr 2026"></div>
+      <div class="form-group"><label>Exam Date</label><input type="text" id="pm-examDate" placeholder="e.g. Jun 2026"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Qualification</label><input type="text" id="pm-qual" placeholder="e.g. Graduate"></div>
+      <div class="form-group"><label>Category</label><input type="text" id="pm-category" placeholder="e.g. SSC, Railway, Banking"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Salary / Pay Scale</label><input type="text" id="pm-salary" placeholder="e.g. 25,500 – 81,100"></div>
+      <div class="form-group"><label>Age Limit</label><input type="text" id="pm-ageLimit" placeholder="e.g. 18-27 years"></div>
+    </div>
+    <div class="form-row single">
+      <div class="form-group"><label>Apply Online Link</label><input type="text" id="pm-applyLink" placeholder="https://..."></div>
+    </div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Badges</label>
+      <div class="badges-picker">
+        <div class="badge-pick" data-badge="new" onclick="toggleBadge(this)">🆕 NEW</div>
+        <div class="badge-pick" data-badge="hot" onclick="toggleBadge(this)">🔥 HOT</div>
+        <div class="badge-pick" data-badge="out" onclick="toggleBadge(this)">✅ OUT</div>
+        <div class="badge-pick" data-badge="soon" onclick="toggleBadge(this)">⏳ SOON</div>
+      </div>
+    </div>
+    <div class="form-row single">
+      <div class="form-group">
+        <label>Active (visible on site)?</label>
+        <select id="pm-active">
+          <option value="true">✅ Yes – Visible</option>
+          <option value="false">❌ No – Hidden</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn btn-primary" style="flex:1" onclick="savePost()">💾 Save Post</button>
+      <button class="btn btn-outline" onclick="closePostModalDirect()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== LOGIN =====
+function doLogin() {
+  const u = document.getElementById('admin-user').value.trim();
+  const p = document.getElementById('admin-pass').value.trim();
+  if(u === window.ADMIN_USER && p === window.ADMIN_PASS) {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('admin-wrap').style.display = 'flex';
+  } else {
+    document.getElementById('login-err').textContent = '❌ Wrong username or password';
+  }
+}
+function doLogout() {
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('admin-wrap').style.display = 'none';
+  document.getElementById('admin-pass').value = '';
+}
+
+// ===== MOBILE SIDEBAR =====
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  sb.classList.toggle('open');
+  ov.classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+// ===== SECTIONS =====
+function showSection(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  const titles = {dashboard:'📊 Dashboard',posts:'📋 Manage Posts',ticker:'📢 Ticker / Breaking News',quicklinks:'⚡ Quick Links',categories:'🗂️ Categories',dates:'📅 Important Dates',stats:'📈 Stats Numbers',settings:'⚙️ Site Settings'};
+  document.getElementById('page-title').textContent = titles[name]||name;
+  if(name==='posts') { window._currentPostTab = window._currentPostTab||'jobs'; renderPostsTable(window._currentPostTab); }
+  closeSidebar(); // auto close on mobile
+}
+
+// ===== POST TABS =====
+window._currentPostTab = 'jobs';
+function switchPostTab(type, btn) {
+  window._currentPostTab = type;
+  document.querySelectorAll('.post-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderPostsTable(type);
+}
+
+function renderPostsTable(type) {
+  const data = window['_posts_'+type] || {};
+  const wrap = document.getElementById('posts-table-wrap');
+  const arr = Object.entries(data).map(([k,v])=>({...v,_key:k})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if(arr.length===0){ wrap.innerHTML='<div style="padding:30px;text-align:center;color:var(--muted)">Koi post nahi. "Add New Post" karo!</div>'; return; }
+  wrap.innerHTML = `<table class="data-table">
+    <thead><tr><th>Title</th><th>Posts</th><th>Last Date</th><th>Badges</th><th>Active</th><th>Actions</th></tr></thead>
+    <tbody>${arr.map(i=>`
+      <tr>
+        <td><div class="t-title">${i.title}</div><div class="t-org">${i.org||''}</div></td>
+        <td>${i.posts||'—'}</td>
+        <td>${i.lastDate||'—'}</td>
+        <td>${(i.badges||[]).map(b=>`<span style="font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;margin-right:3px;background:${b==='hot'?'#fff5f0':b==='new'?'#fff0f0':b==='out'?'#f0fff4':'#fffaf0'};color:${b==='hot'?'#FF6B00':b==='new'?'#E53E3E':b==='out'?'#138808':'#D69E2E'}">${b.toUpperCase()}</span>`).join('')}</td>
+        <td><span class="toggle-active" onclick="toggleActive('${type}','${i._key}',${i.active!==false})" title="Click to toggle">${i.active!==false?'✅':'❌'}</span></td>
+        <td><div class="actions">
+          <button class="btn btn-outline btn-sm" onclick="openPostModal('${type}','${i._key}')">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deletePost('${type}','${i._key}')">🗑️</button>
+        </div></td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+// ===== POST MODAL =====
+function openPostModal(type, key) {
+  const modal = document.getElementById('post-modal');
+  document.getElementById('pm-type').value = type;
+  document.getElementById('pm-key').value = key||'';
+  document.querySelectorAll('.badge-pick').forEach(b=>b.className='badge-pick');
+  const typeLabels = {jobs:'Job',results:'Result',admitCards:'Admit Card',answerKeys:'Answer Key'};
+  document.getElementById('post-modal-title').textContent = (key?'Edit ':'Add New ') + (typeLabels[type]||'Post');
+  if(key) {
+    const d = (window['_posts_'+type]||{})[key];
+    if(!d) return;
+    setVal('pm-title',d.title||''); setVal('pm-org',d.org||''); setVal('pm-posts',d.posts||'');
+    setVal('pm-lastDate',d.lastDate||''); setVal('pm-examDate',d.examDate||'');
+    setVal('pm-qual',d.qual||''); setVal('pm-category',d.category||'');
+    setVal('pm-salary',d.salary||''); setVal('pm-ageLimit',d.ageLimit||'');
+    setVal('pm-applyLink',d.applyLink||'');
+    setVal('pm-active', d.active===false?'false':'true');
+    (d.badges||[]).forEach(b=>{
+      const el = document.querySelector(`.badge-pick[data-badge="${b}"]`);
+      if(el) el.classList.add('sel-'+b);
+    });
+  } else {
+    ['pm-title','pm-org','pm-posts','pm-lastDate','pm-examDate','pm-qual','pm-category','pm-salary','pm-ageLimit','pm-applyLink'].forEach(id=>setVal(id,''));
+    setVal('pm-active','true');
+  }
+  modal.classList.add('open');
+}
+
+function toggleBadge(el) {
+  const b = el.dataset.badge;
+  if(el.classList.contains('sel-'+b)) el.className='badge-pick';
+  else el.className='badge-pick sel-'+b;
+}
+
+function savePost() {
+  const type = document.getElementById('pm-type').value;
+  const key = document.getElementById('pm-key').value;
+  const title = document.getElementById('pm-title').value.trim();
+  if(!title){ alert('Title required!'); return; }
+  const badges = [...document.querySelectorAll('.badge-pick')].filter(b=>b.classList.length>1).map(b=>b.dataset.badge);
+  const data = {
+    title, org:getVal('pm-org'), posts:getVal('pm-posts'), lastDate:getVal('pm-lastDate'),
+    examDate:getVal('pm-examDate'), qual:getVal('pm-qual'), category:getVal('pm-category'),
+    salary:getVal('pm-salary'), ageLimit:getVal('pm-ageLimit'), applyLink:getVal('pm-applyLink'),
+    badges, active: document.getElementById('pm-active').value !== 'false',
+    createdAt: key ? ((window['_posts_'+type]||{})[key]||{}).createdAt || Date.now() : Date.now(),
+    updatedAt: Date.now()
+  };
+  window.saveStatus('Saving...','saving');
+  const path = key ? window.dbRef(window.db,'posts/'+type+'/'+key) : window.dbRef(window.db,'posts/'+type+'/'+Date.now());
+  window.dbSet(path, data).then(()=>{ window.saveStatus('✅ Saved!','saved'); closePostModalDirect(); }).catch(e=>{ window.saveStatus('❌ Error: '+e.message,'error'); });
+}
+
+function deletePost(type, key) {
+  if(!confirm('Confirm delete?')) return;
+  window.saveStatus('Deleting...','saving');
+  window.dbRemove(window.dbRef(window.db,'posts/'+type+'/'+key))
+    .then(()=>window.saveStatus('✅ Deleted','saved'))
+    .catch(e=>window.saveStatus('❌ Error','error'));
+}
+
+function toggleActive(type, key, current) {
+  window.dbUpdate(window.dbRef(window.db,'posts/'+type+'/'+key), {active: !current});
+}
+
+function closePostModal(e) { if(e.target===document.getElementById('post-modal')) closePostModalDirect(); }
+function closePostModalDirect() { document.getElementById('post-modal').classList.remove('open'); }
+
+// ===== TICKER =====
+function renderTickerAdmin() {
+  const data = window._tickerData || {};
+  const arr = Object.entries(data).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  const el = document.getElementById('ticker-admin-list');
+  el.innerHTML = arr.length===0 ? '<div style="color:var(--muted);padding:10px 0;font-size:13px">Koi ticker item nahi. Add karo!</div>' : arr.map(([k,v])=>`
+    <div class="ticker-item-row" data-key="${k}">
+      <span style="color:var(--muted);font-size:12px;flex-shrink:0">📢</span>
+      <input type="text" class="t-text" value="${v.text||''}" placeholder="Ticker text...">
+      <input type="text" class="t-link" value="${v.link||''}" placeholder="Link (optional)" style="max-width:200px">
+      <select class="t-active" style="padding:7px;border:1.5px solid var(--border);border-radius:6px;font-size:13px">
+        <option value="true" ${v.active!==false?'selected':''}>✅ Active</option>
+        <option value="false" ${v.active===false?'selected':''}>❌ Hidden</option>
+      </select>
+      <button class="btn btn-danger btn-sm" onclick="removeTickerItem(this,'${k}')">🗑️</button>
+    </div>`).join('');
+}
+
+function addTickerItem() {
+  const key = 'ticker_'+Date.now();
+  window._tickerData[key] = {text:'New ticker item',link:'#',active:true,order:Date.now()};
+  renderTickerAdmin();
+}
+function removeTickerItem(btn, key) {
+  delete window._tickerData[key];
+  btn.closest('.ticker-item-row').remove();
+}
+function saveTicker() {
+  const rows = document.querySelectorAll('#ticker-admin-list .ticker-item-row');
+  const newData = {};
+  rows.forEach((row,i) => {
+    const key = row.dataset.key;
+    newData[key] = {
+      text: row.querySelector('.t-text').value,
+      link: row.querySelector('.t-link').value||'#',
+      active: row.querySelector('.t-active').value!=='false',
+      order: i
+    };
+  });
+  window.saveStatus('Saving...','saving');
+  window.dbSet(window.dbRef(window.db,'ticker'), newData)
+    .then(()=>window.saveStatus('✅ Ticker Saved!','saved'))
+    .catch(e=>window.saveStatus('❌ Error','error'));
+}
+
+// ===== QUICK LINKS =====
+function renderQuickAdmin() {
+  const data = window._quickLinks || {};
+  const arr = Object.entries(data).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  const el = document.getElementById('quick-admin-list');
+  el.innerHTML = arr.length===0 ? '<div style="color:var(--muted);font-size:13px;padding:10px 0">Koi quick link nahi.</div>' : arr.map(([k,v])=>`
+    <div class="item-row" data-key="${k}">
+      <input type="text" class="ql-icon" value="${v.icon||'📋'}" placeholder="Icon" style="text-align:center">
+      <input type="text" class="ql-label" value="${v.label||''}" placeholder="Label">
+      <input type="text" class="ql-count" value="${v.count||''}" placeholder="Count/subtitle">
+      <input type="text" class="ql-url" value="${v.url||'#'}" placeholder="URL" style="grid-column:span 1">
+      <select class="ql-active" style="padding:6px;border:1.5px solid var(--border);border-radius:6px;font-size:12px">
+        <option value="true" ${v.active!==false?'selected':''}>✅</option>
+        <option value="false" ${v.active===false?'selected':''}>❌</option>
+      </select>
+      <button class="btn btn-danger btn-sm" onclick="this.closest('.item-row').remove()">🗑️</button>
+    </div>`).join('');
+}
+function addQuickItem() {
+  const key = 'ql_'+Date.now();
+  window._quickLinks = window._quickLinks||{};
+  window._quickLinks[key] = {icon:'📋',label:'New Link',count:'',url:'#',active:true,order:Date.now()};
+  renderQuickAdmin();
+}
+function saveQuickLinks() {
+  const rows = document.querySelectorAll('#quick-admin-list .item-row');
+  const newData = {};
+  rows.forEach((row,i)=>{
+    const key = row.dataset.key;
+    newData[key] = {icon:row.querySelector('.ql-icon').value,label:row.querySelector('.ql-label').value,count:row.querySelector('.ql-count').value,url:row.querySelector('.ql-url').value,active:row.querySelector('.ql-active').value!=='false',order:i};
+  });
+  window.saveStatus('Saving...','saving');
+  window.dbSet(window.dbRef(window.db,'quickLinks'),newData).then(()=>window.saveStatus('✅ Quick Links Saved!','saved')).catch(()=>window.saveStatus('❌ Error','error'));
+}
+
+// ===== CATEGORIES =====
+function renderCatsAdmin() {
+  const data = window._categories||{};
+  const arr = Object.entries(data).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  const el = document.getElementById('cats-admin-list');
+  el.innerHTML = arr.length===0 ? '<div style="color:var(--muted);font-size:13px;padding:10px 0">Koi category nahi.</div>' : arr.map(([k,v])=>`
+    <div class="item-row" data-key="${k}" style="grid-template-columns:1fr 1fr auto auto">
+      <input type="text" class="c-label" value="${v.label||''}" placeholder="Category name">
+      <input type="text" class="c-url" value="${v.url||'#'}" placeholder="URL">
+      <select class="c-active" style="padding:6px;border:1.5px solid var(--border);border-radius:6px;font-size:12px">
+        <option value="true" ${v.active!==false?'selected':''}>✅</option>
+        <option value="false" ${v.active===false?'selected':''}>❌</option>
+      </select>
+      <button class="btn btn-danger btn-sm" onclick="this.closest('.item-row').remove()">🗑️</button>
+    </div>`).join('');
+}
+function addCatItem() {
+  const key = 'cat_'+Date.now();
+  window._categories=window._categories||{};
+  window._categories[key]={label:'New Category',url:'#',active:true,order:Date.now()};
+  renderCatsAdmin();
+}
+function saveCategories() {
+  const rows = document.querySelectorAll('#cats-admin-list .item-row');
+  const newData = {};
+  rows.forEach((row,i)=>{
+    const key = row.dataset.key;
+    newData[key]={label:row.querySelector('.c-label').value,url:row.querySelector('.c-url').value,active:row.querySelector('.c-active').value!=='false',order:i};
+  });
+  window.saveStatus('Saving...','saving');
+  window.dbSet(window.dbRef(window.db,'categories'),newData).then(()=>window.saveStatus('✅ Categories Saved!','saved')).catch(()=>window.saveStatus('❌ Error','error'));
+}
+
+// ===== IMPORTANT DATES =====
+function renderDatesAdmin() {
+  const data = window._importantDates||{};
+  const arr = Object.entries(data).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  const el = document.getElementById('dates-admin-list');
+  el.innerHTML = arr.length===0 ? '<div style="color:var(--muted);font-size:13px;padding:10px 0">Koi date nahi.</div>' : arr.map(([k,v])=>`
+    <div class="date-item-row" data-key="${k}">
+      <input type="text" class="d-label" value="${v.label||''}" placeholder="e.g. RRB Group D">
+      <input type="text" class="d-date" value="${v.date||''}" placeholder="e.g. 20 Mar 2026">
+      <select class="d-color" style="padding:6px;border:1.5px solid var(--border);border-radius:6px;font-size:12px">
+        <option value="d-red" ${(v.colorClass||'')==='d-red'?'selected':''}>🔴 Red (Urgent)</option>
+        <option value="d-gold" ${(v.colorClass||'')==='d-gold'?'selected':''}>🟡 Gold (Soon)</option>
+        <option value="d-green" ${(v.colorClass||'')==='d-green'?'selected':''}>🟢 Green (Done)</option>
+      </select>
+      <select class="d-active" style="padding:6px;border:1.5px solid var(--border);border-radius:6px;font-size:12px">
+        <option value="true" ${v.active!==false?'selected':''}>✅</option>
+        <option value="false" ${v.active===false?'selected':''}>❌</option>
+      </select>
+      <button class="btn btn-danger btn-sm" onclick="this.closest('.date-item-row').remove()">🗑️</button>
+    </div>`).join('');
+}
+function addDateItem() {
+  const key='date_'+Date.now();
+  window._importantDates=window._importantDates||{};
+  window._importantDates[key]={label:'New Exam',date:'Mar 2026',colorClass:'d-gold',active:true,order:Date.now()};
+  renderDatesAdmin();
+}
+function saveDates() {
+  const rows = document.querySelectorAll('#dates-admin-list .date-item-row');
+  const newData={};
+  rows.forEach((row,i)=>{
+    const key=row.dataset.key;
+    newData[key]={label:row.querySelector('.d-label').value,date:row.querySelector('.d-date').value,colorClass:row.querySelector('.d-color').value,active:row.querySelector('.d-active').value!=='false',order:i};
+  });
+  window.saveStatus('Saving...','saving');
+  window.dbSet(window.dbRef(window.db,'importantDates'),newData).then(()=>window.saveStatus('✅ Dates Saved!','saved')).catch(()=>window.saveStatus('❌ Error','error'));
+}
+
+// ===== STATS =====
+function saveStats() {
+  const data={activeJobs:Number(getVal('stat-activeJobs')),totalVacancies:Number(getVal('stat-totalVac')),results:Number(getVal('stat-results')),admitCards:Number(getVal('stat-admit'))};
+  window.saveStatus('Saving...','saving');
+  window.dbSet(window.dbRef(window.db,'stats'),data).then(()=>window.saveStatus('✅ Stats Saved!','saved')).catch(()=>window.saveStatus('❌ Error','error'));
+}
+
+// ===== SETTINGS =====
+function saveSettings() {
+  const data={
+    siteTitle:getVal('set-siteTitle'),logoText:getVal('set-logoText'),tagline:getVal('set-tagline'),
+    footerAbout:getVal('set-footerAbout'),footerEmail:getVal('set-footerEmail'),footerBottom:getVal('set-footerBottom'),
+    whatsappLink:getVal('set-whatsappLink'),whatsappText:getVal('set-whatsappText'),waBoxColor:getVal('set-waBoxColor'),
+    notifText:getVal('set-notifText'),notifSubText:getVal('set-notifSubText'),
+    showNotifBanner:document.getElementById('set-notifShow').value!=='false'
+  };
+  window.saveStatus('Saving...','saving');
+  window.dbSet(window.dbRef(window.db,'settings'),data).then(()=>window.saveStatus('✅ Settings Saved!','saved')).catch(()=>window.saveStatus('❌ Error','error'));
+}
+
+// ===== HELPERS =====
+function getVal(id){ const el=document.getElementById(id); return el?el.value:''; }
+function setVal(id,val){ const el=document.getElementById(id); if(el) el.value=val; }
+</script>
+</body>
+</html>

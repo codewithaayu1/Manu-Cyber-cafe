@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SarkariResult.in – Sarkari Naukri, Results, Admit Card 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron:#FF6B00;--saffron-light:#FF8C33;--navy:#0A1628;--navy2:#112240;
+    --green:#138808;--white:#FFFFFF;--off:#F5F6FA;--border:#E2E8F0;
+    --text:#1A202C;--muted:#718096;--red:#E53E3E;--blue:#2B6CB0;--gold:#D69E2E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Source Sans 3',sans-serif;background:var(--off);color:var(--text);}
+
+  /* TOP BAR */
+  .topbar{background:var(--navy);color:#aab8cc;font-size:12px;padding:5px 0;border-bottom:2px solid var(--saffron);}
+  .topbar-inner{max-width:1200px;margin:0 auto;padding:0 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;}
+  .topbar a{color:#aab8cc;text-decoration:none;}.topbar a:hover{color:var(--saffron);}
+  .topbar-links{display:flex;gap:14px;flex-wrap:wrap;}
+  .live-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;animation:blink 1.2s infinite;box-shadow:0 0 5px #22c55e;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+  /* HEADER */
+  header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3);}
+  .header-main{max-width:1200px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:16px;}
+  .logo-box{display:flex;align-items:center;gap:12px;text-decoration:none;}
+  .logo-icon{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,var(--saffron),#FFB347);display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',sans-serif;font-size:22px;font-weight:800;color:white;box-shadow:0 0 20px rgba(255,107,0,0.4);flex-shrink:0;}
+  .logo-text h1{font-family:'Baloo 2',sans-serif;font-size:22px;font-weight:800;color:white;line-height:1.1;}
+  .logo-text span{font-size:11px;color:#aab8cc;font-weight:400;}
+  .header-search{flex:1;max-width:400px;margin-left:auto;display:flex;}
+  .header-search input{flex:1;padding:9px 14px;border:none;border-radius:8px 0 0 8px;font-size:13px;outline:none;background:#1e2d45;color:white;}
+  .header-search input::placeholder{color:#6b7d93;}
+  .header-search button{padding:9px 16px;background:var(--saffron);border:none;border-radius:0 8px 8px 0;cursor:pointer;color:white;font-size:14px;}
+
+  /* NAV */
+  nav{background:var(--saffron);box-shadow:0 2px 8px rgba(255,107,0,0.3);}
+  .nav-inner{max-width:1200px;margin:0 auto;padding:0 16px;display:flex;flex-wrap:wrap;}
+  nav a{color:white;text-decoration:none;padding:11px 16px;font-size:13px;font-weight:600;border-right:1px solid rgba(255,255,255,0.2);transition:background 0.2s;white-space:nowrap;}
+  nav a:hover,nav a.active{background:rgba(0,0,0,0.2);}
+
+  /* TICKER */
+  .ticker{background:#fff9f0;border-top:1px solid #ffe0b2;border-bottom:1px solid #ffe0b2;padding:6px 0;overflow:hidden;}
+  .ticker-inner{max-width:1200px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:12px;}
+  .ticker-label{background:var(--saffron);color:white;padding:2px 10px;border-radius:4px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;}
+  .ticker-wrap{overflow:hidden;flex:1;}
+  .ticker-text{white-space:nowrap;font-size:12px;color:var(--navy);animation:ticker 40s linear infinite;}
+  @keyframes ticker{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+  .ticker-text a{color:var(--saffron);text-decoration:none;font-weight:600;}
+
+  /* MAIN */
+  .main-wrap{max-width:1200px;margin:18px auto;padding:0 16px;display:grid;grid-template-columns:1fr 300px;gap:18px;}
+
+  /* STATS BAR */
+  .stats-bar{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:10px;padding:16px 20px;margin-bottom:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;box-shadow:0 4px 15px rgba(10,22,40,0.3);}
+  .stat-item{text-align:center;}
+  .stat-num{font-family:'Baloo 2',sans-serif;font-size:22px;font-weight:800;color:var(--saffron);line-height:1;}
+  .stat-label{font-size:10px;color:#8899aa;margin-top:3px;font-weight:600;}
+
+  /* SECTION CARD */
+  .section-card{background:white;border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+  .section-head{background:var(--navy);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+  .section-head h2{font-family:'Baloo 2',sans-serif;font-size:15px;font-weight:700;color:white;display:flex;align-items:center;gap:8px;}
+  .section-head h2 .dot{width:8px;height:8px;border-radius:50%;background:var(--saffron);display:inline-block;}
+  .view-more{font-size:12px;color:var(--saffron);text-decoration:none;font-weight:600;}
+
+  /* QUICK LINKS */
+  .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px;}
+  .quick-item{background:white;border:1px solid var(--border);border-radius:8px;padding:14px 10px;text-align:center;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;}
+  .quick-item:hover{border-color:var(--saffron);box-shadow:0 4px 12px rgba(255,107,0,0.15);transform:translateY(-2px);}
+  .quick-icon{font-size:26px;margin-bottom:6px;}
+  .quick-label{font-size:11px;font-weight:700;color:var(--navy);}
+  .quick-count{font-size:10px;color:var(--muted);margin-top:2px;}
+
+  /* TABS */
+  .tabs{display:flex;border-bottom:1px solid var(--border);background:#f8fafc;}
+  .tab-btn{padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;transition:all 0.2s;}
+  .tab-btn.active{color:var(--saffron);border-bottom-color:var(--saffron);background:white;}
+  .tab-content{display:none;}.tab-content.active{display:block;}
+
+  /* JOB LIST */
+  .job-item{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid #f0f4f8;transition:background 0.15s;cursor:pointer;}
+  .job-item:last-child{border-bottom:none;}
+  .job-item:hover{background:#fff9f5;}
+  .job-arrow{color:var(--saffron);font-size:12px;flex-shrink:0;margin-top:3px;}
+  .job-info{flex:1;}
+  .job-title{font-size:13px;font-weight:600;color:var(--navy);text-decoration:none;line-height:1.4;}
+  .job-title:hover{color:var(--saffron);}
+  .job-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+  .badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:0.3px;}
+  .badge-new{background:#fff0f0;color:var(--red);border:1px solid #fcc;}
+  .badge-out{background:#f0fff4;color:var(--green);border:1px solid #9ae6b4;}
+  .badge-soon{background:#fffaf0;color:var(--gold);border:1px solid #f6e05e;}
+  .badge-hot{background:#fff5f0;color:var(--saffron);border:1px solid #fbd38d;}
+  .badge-posts{background:#ebf8ff;color:var(--blue);border:1px solid #bee3f8;}
+  .job-date{font-size:10px;color:var(--muted);}
+  .empty-msg{padding:30px;text-align:center;color:var(--muted);font-size:13px;}
+
+  /* CATEGORIES */
+  .cat-pills{display:flex;flex-wrap:wrap;gap:8px;padding:14px;}
+  .cat-pill{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;border:1.5px solid var(--border);color:var(--navy);transition:all 0.2s;}
+  .cat-pill:hover{border-color:var(--saffron);color:var(--saffron);background:#fff9f5;}
+
+  /* SIDEBAR */
+  .sidebar-card{background:white;border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+  .sidebar-head{padding:10px 14px;}
+  .sidebar-head h3{font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;color:white;display:flex;align-items:center;gap:7px;}
+  .sidebar-head.green-bg{background:var(--green);}
+  .sidebar-head.orange-bg{background:var(--saffron);}
+  .sidebar-head.blue-bg{background:var(--blue);}
+  .sidebar-item{display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid #f0f4f8;text-decoration:none;transition:background 0.15s;}
+  .sidebar-item:last-child{border-bottom:none;}
+  .sidebar-item:hover{background:#f8fafc;}
+  .sidebar-item .s-arrow{color:var(--saffron);font-size:11px;flex-shrink:0;}
+  .sidebar-item .s-title{font-size:12px;font-weight:600;color:var(--navy);flex:1;line-height:1.3;}
+  .sidebar-item .s-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;flex-shrink:0;}
+  .dates-list{padding:4px 0;}
+  .date-row{display:flex;justify-content:space-between;padding:7px 14px;border-bottom:1px solid #f0f4f8;font-size:12px;}
+  .date-row:last-child{border-bottom:none;}
+  .date-row .d-label{color:var(--muted);font-weight:600;}
+  .date-row .d-val{font-weight:700;}
+  .d-red{color:var(--red)}.d-gold{color:var(--gold)}.d-green{color:var(--green)}
+
+  /* WA BOX */
+  .wa-box{border-radius:10px;padding:16px;text-align:center;margin-bottom:18px;}
+
+  /* NOTIF */
+  .notif-banner{background:linear-gradient(135deg,#0A1628,#1a2d4a);border:1px solid #1e3a5f;border-radius:10px;padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+  .notif-btn{background:var(--saffron);color:white;border:none;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:white;border-radius:12px;padding:24px;max-width:480px;width:90%;position:relative;border-top:4px solid var(--saffron);animation:slideUp 0.3s ease;}
+  @keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);}
+  .modal h3{font-family:'Baloo 2',sans-serif;font-size:17px;font-weight:700;color:var(--navy);margin-bottom:10px;}
+  .modal-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .modal-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f4f8;font-size:13px;}
+  .modal-row span:first-child{color:var(--muted);font-weight:600;}
+  .modal-row span:last-child{color:var(--navy);font-weight:700;text-align:right;max-width:60%;}
+  .modal-btns{display:flex;gap:10px;margin-top:16px;}
+  .btn-apply{flex:1;background:var(--saffron);color:white;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;}
+  .btn-notify{flex:1;background:var(--navy);color:white;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;}
+
+  /* LOADING */
+  .loading{padding:40px;text-align:center;color:var(--muted);}
+  .spinner{width:32px;height:32px;border:3px solid #f0f4f8;border-top-color:var(--saffron);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 10px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* FOOTER */
+  footer{background:var(--navy);color:#8899aa;margin-top:30px;padding:30px 0 0;border-top:3px solid var(--saffron);}
+  .footer-grid{max-width:1200px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px;}
+  .footer-col h4{font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;color:white;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #1e2d45;}
+  .footer-col p{font-size:12px;line-height:1.7;}
+  .footer-col a{display:block;font-size:12px;color:#8899aa;text-decoration:none;padding:3px 0;}
+  .footer-col a:hover{color:var(--saffron);}
+  .footer-bottom{background:#071020;margin-top:24px;padding:12px 16px;text-align:center;font-size:11px;color:#4a5568;}
+
+  @media(max-width:900px){.main-wrap{grid-template-columns:1fr}.sidebar{display:none}.quick-grid{grid-template-columns:repeat(2,1fr)}.stats-bar{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.header-search{display:none}.logo-text h1{font-size:18px}nav a{padding:9px 11px;font-size:12px}.footer-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ===== FIREBASE CONFIG — YAHAN APNA CONFIG PASTE KARO ===== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  // 🔴 APNA FIREBASE CONFIG YAHAN PASTE KARO:
+  const firebaseConfig = {
+    apiKey: "AIzaSyB0Dphn_eNlwvwYX-Oyv59l23SMglHaAoE",
+    authDomain: "cyber-e5c99.firebaseapp.com",
+    databaseURL: "https://cyber-e5c99-default-rtdb.firebaseio.com",
+    projectId: "cyber-e5c99",
+    storageBucket: "cyber-e5c99.firebasestorage.app",
+    messagingSenderId: "430012918147",
+    appId: "1:430012918147:web:8942d816d328fa80c2eeb6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // ===== SITE SETTINGS =====
+  onValue(ref(db,'settings'), snap => {
+    const s = snap.val() || {};
+    // Logo & Title
+    if(s.siteTitle) document.getElementById('site-title').textContent = s.siteTitle;
+    if(s.siteTitle) document.title = s.siteTitle + ' – Sarkari Naukri 2026';
+    if(s.logoText) document.getElementById('logo-abbr').textContent = s.logoText;
+    if(s.tagline) document.getElementById('site-tagline').textContent = s.tagline;
+    if(s.footerAbout) document.getElementById('footer-about').textContent = s.footerAbout;
+    if(s.footerEmail) document.getElementById('footer-email').textContent = '📧 ' + s.footerEmail;
+    if(s.contactEmail) document.getElementById('topbar-contact').textContent = s.contactEmail;
+    // WhatsApp
+    if(s.whatsappLink){ document.getElementById('wa-join-btn').href = s.whatsappLink; document.getElementById('topbar-wa').href = s.whatsappLink; }
+    if(s.whatsappText) document.getElementById('wa-text').textContent = s.whatsappText;
+    if(s.waBoxColor) document.getElementById('wa-box').style.background = s.waBoxColor;
+    // Notification banner
+    if(s.notifText) document.getElementById('notif-text').textContent = s.notifText;
+    if(s.notifSubText) document.getElementById('notif-subtext').textContent = s.notifSubText;
+    if(s.showNotifBanner === false) document.getElementById('notif-banner').style.display='none';
+    // Footer links
+    if(s.footerLinks){
+      const fc = document.getElementById('footer-links');
+      fc.innerHTML = s.footerLinks.map(l=>`<a href="${l.url||'#'}">${l.label}</a>`).join('');
+    }
+  });
+
+  // ===== TICKER =====
+  onValue(ref(db,'ticker'), snap => {
+    const items = snap.val();
+    if(!items) return;
+    const arr = Object.values(items).filter(i=>i.active!==false);
+    const el = document.getElementById('ticker-text');
+    el.innerHTML = arr.map(i=>`🔥 <a href="${i.link||'#'}">${i.text}</a> &nbsp;|&nbsp; `).join('');
+  });
+
+  // ===== STATS =====
+  onValue(ref(db,'stats'), snap => {
+    const s = snap.val() || {};
+    if(s.activeJobs !== undefined) document.getElementById('stat-jobs').textContent = Number(s.activeJobs).toLocaleString('en-IN');
+    if(s.totalVacancies !== undefined) document.getElementById('stat-vac').textContent = Number(s.totalVacancies).toLocaleString('en-IN');
+    if(s.results !== undefined) document.getElementById('stat-results').textContent = Number(s.results).toLocaleString('en-IN');
+    if(s.admitCards !== undefined) document.getElementById('stat-admit').textContent = Number(s.admitCards).toLocaleString('en-IN');
+  });
+
+  // ===== QUICK LINKS =====
+  onValue(ref(db,'quickLinks'), snap => {
+    const items = snap.val();
+    if(!items) return;
+    const arr = Object.values(items).filter(i=>i.active!==false).sort((a,b)=>(a.order||0)-(b.order||0));
+    document.getElementById('quick-grid').innerHTML = arr.map(i=>`
+      <a href="${i.url||'#'}" class="quick-item">
+        <div class="quick-icon">${i.icon||'📋'}</div>
+        <div class="quick-label">${i.label}</div>
+        <div class="quick-count">${i.count||''}</div>
+      </a>`).join('');
+  });
+
+  // ===== CATEGORIES =====
+  onValue(ref(db,'categories'), snap => {
+    const items = snap.val();
+    if(!items) return;
+    const arr = Object.values(items).filter(i=>i.active!==false).sort((a,b)=>(a.order||0)-(b.order||0));
+    document.getElementById('cat-pills').innerHTML = arr.map(i=>`<a href="${i.url||'#'}" class="cat-pill">${i.label}</a>`).join('');
+  });
+
+  // ===== IMPORTANT DATES =====
+  onValue(ref(db,'importantDates'), snap => {
+    const items = snap.val();
+    const el = document.getElementById('dates-list');
+    if(!items){ el.innerHTML='<div class="empty-msg">Koi dates nahi</div>'; return; }
+    const arr = Object.values(items).filter(i=>i.active!==false).sort((a,b)=>(a.order||0)-(b.order||0));
+    el.innerHTML = arr.map(i=>`
+      <div class="date-row">
+        <span class="d-label">${i.label}</span>
+        <span class="d-val ${i.colorClass||'d-gold'}">${i.date}</span>
+      </div>`).join('');
+  });
+
+  // ===== SIDEBAR HOT JOBS =====
+  onValue(ref(db,'posts/jobs'), snap => {
+    const items = snap.val();
+    const el = document.getElementById('sidebar-hot');
+    window._jobsData = items;
+    if(!items){ el.innerHTML='<div class="empty-msg">Koi hot job nahi</div>'; return; }
+    const arr = Object.entries(items)
+      .map(([k,v])=>({...v,_key:k}))
+      .filter(i=>i.active!==false && i.badges && i.badges.includes('hot'))
+      .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0))
+      .slice(0,5);
+    if(arr.length===0){ el.innerHTML='<div class="empty-msg">Koi hot job nahi</div>'; return; }
+    el.innerHTML = arr.map(i=>`
+      <div class="sidebar-item" onclick="openModal('${i._key}','jobs')" style="cursor:pointer">
+        <span class="s-arrow">▶</span>
+        <span class="s-title">${i.title}</span>
+        <span class="s-badge badge-hot" style="background:#fff5f0;color:var(--saffron);border:1px solid #fbd38d;">${i.posts||''}</span>
+      </div>`).join('');
+    renderTabContent('jobs');
+  });
+
+  onValue(ref(db,'posts/results'), snap => {
+    window._resultsData = snap.val();
+    const el = document.getElementById('sidebar-results');
+    const items = snap.val();
+    if(!items){ el.innerHTML='<div class="empty-msg">Koi result nahi</div>'; return; }
+    const arr = Object.entries(items)
+      .map(([k,v])=>({...v,_key:k}))
+      .filter(i=>i.active!==false && i.badges && i.badges.includes('out'))
+      .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0))
+      .slice(0,5);
+    el.innerHTML = arr.length===0 ? '<div class="empty-msg">Koi result nahi</div>' : arr.map(i=>`
+      <div class="sidebar-item" onclick="openModal('${i._key}','results')" style="cursor:pointer">
+        <span class="s-arrow">✅</span>
+        <span class="s-title">${i.title}</span>
+        <span class="s-badge badge-out" style="background:#f0fff4;color:var(--green);border:1px solid #9ae6b4;">OUT</span>
+      </div>`).join('');
+    renderTabContent('results');
+  });
+
+  onValue(ref(db,'posts/admitCards'), snap => { window._admitData = snap.val(); renderTabContent('admitCards'); });
+  onValue(ref(db,'posts/answerKeys'), snap => { window._answerkeyData = snap.val(); renderTabContent('answerKeys'); });
+</script>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-links">
+      <a href="#">Home</a>
+      <a id="topbar-contact" href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Disclaimer</a>
+      <a id="topbar-wa" href="#">💬 WhatsApp</a>
+    </div>
+    <div><span class="live-dot"></span> &nbsp;Live Updates</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-main">
+    <a href="#" class="logo-box">
+      <div class="logo-icon" id="logo-abbr">SR</div>
+      <div class="logo-text">
+        <h1 id="site-title">SarkariResult.in</h1>
+        <span id="site-tagline">Sarkari Naukri | Result | Admit Card 2026</span>
+      </div>
+    </a>
+    <div class="header-search">
+      <input type="text" id="searchInput" placeholder="Search jobs, results, admit cards..." oninput="searchAll(this.value)">
+      <button onclick="searchAll(document.getElementById('searchInput').value)">🔍</button>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="active">🏠 Home</a>
+      <a href="#" onclick="switchTabByName('jobs')">📋 Latest Jobs</a>
+      <a href="#" onclick="switchTabByName('results')">📜 Results</a>
+      <a href="#" onclick="switchTabByName('admitCards')">🎫 Admit Card</a>
+      <a href="#" onclick="switchTabByName('answerKeys')">📝 Answer Key</a>
+      <a href="#">📚 Syllabus</a>
+      <a href="#">🎓 Admission</a>
+      <a href="#">📅 Exam Calendar</a>
+    </div>
+  </nav>
+</header>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-label">🔴 LIVE</span>
+    <div class="ticker-wrap">
+      <div class="ticker-text" id="ticker-text">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+  <div class="content">
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-item"><div class="stat-num" id="stat-jobs">—</div><div class="stat-label">Active Jobs</div></div>
+      <div class="stat-item"><div class="stat-num" id="stat-vac">—</div><div class="stat-label">Total Vacancies</div></div>
+      <div class="stat-item"><div class="stat-num" id="stat-results">—</div><div class="stat-label">Results Out</div></div>
+      <div class="stat-item"><div class="stat-num" id="stat-admit">—</div><div class="stat-label">Admit Cards</div></div>
+    </div>
+
+    <!-- NOTIF BANNER -->
+    <div class="notif-banner" id="notif-banner">
+      <div style="font-size:20px;flex-shrink:0">🔔</div>
+      <div style="flex:1">
+        <strong style="display:block;color:white;font-size:13px;margin-bottom:3px" id="notif-text">Job Alerts On Karo</strong>
+        <span style="font-size:12px;color:#8899aa" id="notif-subtext">Naye jobs ki instant notification paao</span>
+      </div>
+      <button class="notif-btn" onclick="alert('Notifications enabled! ✅')">Enable</button>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="section-card">
+      <div class="section-head"><h2><span class="dot"></span> Quick Links</h2></div>
+      <div class="quick-grid" id="quick-grid">
+        <div class="loading"><div class="spinner"></div>Loading...</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="section-card">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('jobs',this)">📋 Latest Jobs</button>
+        <button class="tab-btn" onclick="switchTab('results',this)">📜 Results</button>
+        <button class="tab-btn" onclick="switchTab('admitCards',this)">🎫 Admit Cards</button>
+        <button class="tab-btn" onclick="switchTab('answerKeys',this)">📝 Answer Keys</button>
+      </div>
+      <div class="tab-content active" id="tab-jobs"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      <div class="tab-content" id="tab-results"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      <div class="tab-content" id="tab-admitCards"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      <div class="tab-content" id="tab-answerKeys"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      <div style="padding:12px 16px;border-top:1px solid var(--border);text-align:center">
+        <a href="#" class="view-more" style="font-size:13px">View All &rarr;</a>
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="section-card">
+      <div class="section-head"><h2><span class="dot"></span> Browse by Category</h2></div>
+      <div class="cat-pills" id="cat-pills">
+        <div class="loading" style="padding:14px">Loading...</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- HOT JOBS -->
+    <div class="sidebar-card">
+      <div class="sidebar-head orange-bg"><h3>🔥 Hot Jobs</h3></div>
+      <div id="sidebar-hot"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="sidebar-card">
+      <div class="sidebar-head green-bg"><h3>✅ Recent Results</h3></div>
+      <div id="sidebar-results"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+
+    <!-- IMPORTANT DATES -->
+    <div class="sidebar-card">
+      <div class="sidebar-head blue-bg"><h3>📅 Important Dates</h3></div>
+      <div class="dates-list" id="dates-list"><div class="loading" style="padding:14px">Loading...</div></div>
+    </div>
+
+    <!-- WHATSAPP -->
+    <div class="wa-box" id="wa-box" style="background:#25D366">
+      <div style="font-size:30px;margin-bottom:8px">💬</div>
+      <div style="color:white;font-weight:700;font-size:14px;margin-bottom:6px">WhatsApp Channel Join Karo</div>
+      <div style="color:rgba(255,255,255,0.85);font-size:12px;margin-bottom:12px" id="wa-text">Daily job alerts & updates</div>
+      <a id="wa-join-btn" href="#" style="display:block;background:white;color:#25D366;font-weight:700;font-size:13px;padding:9px;border-radius:7px;text-decoration:none">📲 Join Now</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <h3 id="modal-title"></h3>
+    <div class="modal-meta" id="modal-badges"></div>
+    <div id="modal-rows"></div>
+    <div class="modal-btns">
+      <button class="btn-apply" id="modal-apply-btn">Apply Online</button>
+      <button class="btn-notify" onclick="alert('Notification set! ✅')">🔔 Notify Me</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4 id="footer-site-name">SarkariResult.in</h4>
+      <p id="footer-about">India ka #1 trusted platform for Sarkari Naukri, Government Job Results, Admit Cards, Answer Keys aur exam news.</p>
+      <br><p id="footer-email" style="font-size:11px"></p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <div id="footer-links">
+        <a href="#">Latest Jobs</a><a href="#">Results 2026</a>
+        <a href="#">Admit Card</a><a href="#">Answer Key</a>
+        <a href="#">Syllabus</a><a href="#">Admission</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Top Categories</h4>
+      <a href="#">SSC Jobs</a><a href="#">Railway Jobs</a>
+      <a href="#">Bank Jobs</a><a href="#">UPSC</a>
+      <a href="#">Police Jobs</a><a href="#">Teaching Jobs</a>
+    </div>
+    <div class="footer-col">
+      <h4>State Jobs</h4>
+      <a href="#">UP Jobs</a><a href="#">Bihar Jobs</a>
+      <a href="#">Rajasthan Jobs</a><a href="#">MP Jobs</a>
+      <a href="#">Delhi Jobs</a><a href="#">Haryana Jobs</a>
+    </div>
+  </div>
+  <div class="footer-bottom" id="footer-bottom">
+    © 2026 SarkariResult.in – All Rights Reserved &nbsp;|&nbsp; Disclaimer: This is an unofficial portal for informational purposes.
+  </div>
+</footer>
+
+<script>
+const badgeClass = b => ({'new':'badge-new','out':'badge-out','soon':'badge-soon','hot':'badge-hot'}[b]||'badge-new');
+const badgeLabel = b => ({'new':'NEW','out':'OUT','soon':'SOON','hot':'HOT'}[b]||b.toUpperCase());
+
+let _currentTab = 'jobs';
+const tabDataMap = { jobs:'_jobsData', results:'_resultsData', admitCards:'_admitData', answerKeys:'_answerkeyData' };
+
+function renderTabContent(type) {
+  const data = window[tabDataMap[type]];
+  const el = document.getElementById('tab-' + type);
+  if (!el) return;
+  if (!data) { el.innerHTML = '<div class="empty-msg">Koi data nahi hai. Admin se contact karo.</div>'; return; }
+  const arr = Object.entries(data)
+    .map(([k,v]) => ({...v, _key:k}))
+    .filter(i => i.active !== false)
+    .sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+  if (arr.length === 0) { el.innerHTML = '<div class="empty-msg">Abhi koi entry nahi hai.</div>'; return; }
+  el.innerHTML = arr.map(i => `
+    <div class="job-item" onclick="openModal('${i._key}','${type}')">
+      <span class="job-arrow">▶</span>
+      <div class="job-info">
+        <span class="job-title">${i.title}</span>
+        <div class="job-meta">
+          ${(i.badges||[]).map(b=>`<span class="badge ${badgeClass(b)}">${badgeLabel(b)}</span>`).join('')}
+          ${i.posts ? `<span class="badge badge-posts">📋 ${i.posts} Posts</span>` : ''}
+          ${i.lastDate ? `<span class="job-date">📅 ${i.lastDate}</span>` : ''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function switchTab(tab, btn) {
+  _currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const tc = document.getElementById('tab-'+tab);
+  if(tc) tc.classList.add('active');
+}
+
+function switchTabByName(tab) {
+  const btns = document.querySelectorAll('.tab-btn');
+  const map = {jobs:0, results:1, admitCards:2, answerKeys:3};
+  switchTab(tab, btns[map[tab]]);
+  document.querySelector('.section-card:nth-child(3)').scrollIntoView({behavior:'smooth'});
+  return false;
+}
+
+function searchAll(q) {
+  if (!q.trim()) { renderTabContent(_currentTab); return; }
+  const lower = q.toLowerCase();
+  const data = window[tabDataMap[_currentTab]];
+  if (!data) return;
+  const filtered = {};
+  Object.entries(data).forEach(([k,v]) => {
+    if ((v.title||'').toLowerCase().includes(lower) || (v.org||'').toLowerCase().includes(lower) || (v.category||'').toLowerCase().includes(lower))
+      filtered[k] = v;
+  });
+  window['_searchFiltered'] = filtered;
+  const el = document.getElementById('tab-'+_currentTab);
+  const arr = Object.entries(filtered).map(([k,v])=>({...v,_key:k})).filter(i=>i.active!==false);
+  if(arr.length===0){ el.innerHTML='<div class="empty-msg">Koi result nahi mila "'+q+'" ke liye</div>'; return; }
+  el.innerHTML = arr.map(i=>`
+    <div class="job-item" onclick="openModal('${i._key}','${_currentTab}')">
+      <span class="job-arrow">▶</span>
+      <div class="job-info">
+        <span class="job-title">${i.title}</span>
+        <div class="job-meta">
+          ${(i.badges||[]).map(b=>`<span class="badge ${badgeClass(b)}">${badgeLabel(b)}</span>`).join('')}
+          ${i.posts?`<span class="badge badge-posts">📋 ${i.posts} Posts</span>`:''}
+          ${i.lastDate?`<span class="job-date">📅 ${i.lastDate}</span>`:''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openModal(key, type) {
+  const data = window[tabDataMap[type]];
+  if(!data || !data[key]) return;
+  const i = data[key];
+  document.getElementById('modal-title').textContent = i.title;
+  document.getElementById('modal-badges').innerHTML = (i.badges||[]).map(b=>`<span class="badge ${badgeClass(b)}">${badgeLabel(b)}</span>`).join('');
+  document.getElementById('modal-rows').innerHTML = [
+    ['Organization', i.org],
+    ['Total Posts', i.posts],
+    ['Qualification', i.qual],
+    ['Last Date', i.lastDate],
+    ['Category', i.category],
+    ['Exam Date', i.examDate],
+    ['Salary', i.salary],
+    ['Age Limit', i.ageLimit],
+  ].filter(r=>r[1]).map(r=>`<div class="modal-row"><span>${r[0]}</span><span>${r[1]}</span></div>`).join('');
+  const applyBtn = document.getElementById('modal-apply-btn');
+  applyBtn.onclick = () => { if(i.applyLink) window.open(i.applyLink,'_blank'); else alert('Official website pe jao apply karne ke liye.'); };
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) { if(e.target===document.getElementById('modal')) closeModalDirect(); }
+function closeModalDirect() { document.getElementById('modal').classList.remove('open'); }
+</script>
+</body>
+</html>
